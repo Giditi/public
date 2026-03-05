@@ -1,0 +1,61 @@
+>----------main
+
+call ut_push.bat %UT_NOMEBAT%
+
+REM -----------------------------------------------------------------------------
+REM dos env setting
+REM -----------------------------------------------------------------------------
+call ut_set_env_main.bat
+
+REM -----------------------------------------------------------------------------
+REM check parameters
+REM -----------------------------------------------------------------------------
+set "UT_PKG=%1"
+set "UT_LOG_PREFIX=%UT_PKG%"
+
+if ("%UT_PKG%") == ("") (set "UT_PKG=SAMPLE")
+if ("%UT_PKG%") NEQ ("") (set "UT_FILE_LST=%UT_PKG%")
+if ("%UT_LOG_PREFIX%") == ("") set "UT_LOG_PREFIX=GEN"
+call ut_parse_file.bat "%UT_PKG%"
+set "UT_PKG=%UT_FILE_NAME%"
+
+REM -----------------------------------------------------------------------------
+REM check file lst format
+REM -----------------------------------------------------------------------------
+call ut_parse_file.bat "%UT_FILE_LST%"
+
+if not defined UT_FILE_EXT (set "UT_FILE_LST=%UT_FILE_LST%.lst")
+if not defined UT_FILE_DRVPATH (set "UT_FILE_LST=%UT_DIRSQL%\%UT_FILE_LST%")
+if (%UT_FILE_DRVPATH%)==(%cd%\) (set "UT_FILE_LST=%UT_DIRSQL%\%UT_FILE_LST%")
+
+call ut_set_log.bat
+
+call "%UT_DIRBAT%"\ut_wr_log.bat LOG "Begin batch" 0 0
+
+:CONTINUE
+
+<----------ParseFile
+
+@echo off
+:ParseFile
+echo parse args : %1
+
+set UT_FILE_FULL_PATH=%~f1
+set UT_FILE_DRIVE=%~d1
+set UT_FILE_DRVPATH=%~dp1
+set UT_FILE_PATH=%~p1
+set UT_FILE_PATH_EXP=%~s1
+set UT_FILE_FILENAME=%~n1
+set UT_FILE_EXT=%~x1
+set UT_FILE_ATTR=%~a1
+set UT_FILE_DATE=%~t1
+set UT_FILE_SIZE=%~z1
+set UT_FILE_NAMEEXTD=%~nx1
+
+set ut_file_
+exit /b 0	
+>
+<
+
+>
+<
